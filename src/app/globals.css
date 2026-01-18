@@ -1,26 +1,319 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --background: #0b0b10;
+  --foreground: #f6f3ef;
+  --accent: #f4b63e;
+  --accent-2: #7c5cff;
+  --week-day: #8bb6ff;
+  --muted: #a29f98;
+  --card: #141421;
+  --card-2: #111116;
+  --border: #2a2a3a;
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --font-sans: var(--font-sans);
+  --font-display: var(--font-display);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+* {
+  box-sizing: border-box;
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-sans), ui-sans-serif, system-ui;
+  min-height: 100vh;
+}
+
+.bg-grid {
+  background-image: radial-gradient(circle at 1px 1px, #2a2a3a 1px, transparent 0);
+  background-size: 32px 32px;
+}
+
+.hero-glow {
+  background: radial-gradient(circle at top left, rgba(124, 92, 255, 0.4), transparent 55%),
+    radial-gradient(circle at top right, rgba(244, 182, 62, 0.35), transparent 50%),
+    radial-gradient(circle at center, rgba(255, 255, 255, 0.08), transparent 60%);
+}
+
+.mascot-logo {
+  border-radius: 999px;
+  background: radial-gradient(circle, rgba(255, 255, 255, 0.18), transparent 70%);
+  filter: drop-shadow(0 0 18px rgba(244, 182, 62, 0.35))
+    drop-shadow(0 0 30px rgba(124, 92, 255, 0.25));
+}
+
+.mascot-hero {
+  width: min(100%, 420px);
+  height: auto;
+  filter: drop-shadow(0 24px 60px rgba(16, 16, 30, 0.6))
+    drop-shadow(0 0 40px rgba(124, 92, 255, 0.3));
+}
+
+.mascot-hero-frame {
+  display: flex;
+  justify-content: center;
+  padding: 12px 0 18px;
+}
+
+.hero-badge {
+  --glow-x: 0%;
+  --glow-alpha: 0.6;
+  background: linear-gradient(
+    120deg,
+    rgba(124, 92, 255, var(--glow-alpha)),
+    rgba(244, 182, 62, calc(var(--glow-alpha) * 0.9)),
+    rgba(124, 92, 255, var(--glow-alpha))
+  );
+  background-size: 200% 200%;
+  background-position: var(--glow-x) 50%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  text-shadow: 0 0 16px rgba(124, 92, 255, 0.25);
+}
+
+.glass {
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.06), rgba(255, 255, 255, 0.02));
+  border: 1px solid var(--border);
+  backdrop-filter: blur(18px);
+}
+
+.text-display {
+  font-family: var(--font-display), ui-serif, Georgia;
+  letter-spacing: -0.02em;
+}
+
+.rim-glow {
+  position: relative;
+  z-index: 0;
+  --rim-angle: 0deg;
+}
+
+.rim-glow::before {
+  content: "";
+  position: absolute;
+  inset: -2px;
+  border-radius: 999px;
+  background: conic-gradient(
+    from var(--rim-angle),
+    rgba(244, 182, 62, 0.0),
+    rgba(244, 182, 62, 0.5),
+    rgba(124, 92, 255, 0.9),
+    rgba(244, 182, 62, 0.3),
+    rgba(244, 182, 62, 0.0)
+  );
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  filter: blur(0.4px);
+  z-index: -1;
+}
+
+.rim-glow.is-animating::before {
+  opacity: 1;
+}
+
+.week-rim {
+  position: relative;
+  z-index: 0;
+  --rim-angle: 0deg;
+}
+
+.week-rim::before {
+  content: "";
+  position: absolute;
+  inset: -1px;
+  border-radius: inherit;
+  background: conic-gradient(
+    from var(--rim-angle),
+    rgba(124, 92, 255, 0.0),
+    rgba(124, 92, 255, 0.45),
+    rgba(244, 182, 62, 0.35),
+    rgba(124, 92, 255, 0.2),
+    rgba(124, 92, 255, 0.0)
+  );
+  opacity: 0.6;
+  filter: blur(0.6px);
+  z-index: -1;
+}
+
+.storm-rim {
+  position: absolute;
+  inset: 2px;
+  border-radius: inherit;
+  display: block;
+  pointer-events: none;
+  z-index: 2;
+  opacity: 1;
+  mix-blend-mode: screen;
+}
+
+.storm-rim::before {
+  content: "";
+  position: absolute;
+  inset: -1px;
+  border-radius: inherit;
+  background: conic-gradient(
+    from var(--rim-angle),
+    rgba(124, 92, 255, 0.0),
+    rgba(124, 92, 255, 0.55),
+    rgba(244, 182, 62, 0.45),
+    rgba(124, 92, 255, 0.2),
+    rgba(124, 92, 255, 0.0)
+  );
+  opacity: 0.9;
+  filter: blur(0.9px);
+}
+
+.storm-chip {
+  position: relative;
+  overflow: hidden;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  background: linear-gradient(
+    130deg,
+    rgba(20, 20, 33, 0.9),
+    rgba(25, 25, 40, 0.7)
+  );
+  box-shadow:
+    inset 0 0 18px rgba(255, 255, 255, 0.08),
+    inset 0 0 24px rgba(124, 92, 255, 0.18),
+    inset 0 0 18px rgba(244, 182, 62, 0.12);
+  backdrop-filter: blur(18px);
+  --storm-rotate: 0deg;
+  --storm-shift: 0%;
+  --storm-glow: 0.7;
+  --storm-flash: 0.35;
+  --storm-core: 0.4;
+}
+
+.storm-chip::before {
+  content: "";
+  position: absolute;
+  inset: -55%;
+  background:
+    radial-gradient(
+      circle at 30% 30%,
+      rgba(124, 92, 255, 0.5),
+      transparent 52%
+    ),
+    radial-gradient(
+      circle at 70% 60%,
+      rgba(244, 182, 62, 0.55),
+      transparent 58%
+    ),
+    radial-gradient(
+      circle at 50% 40%,
+      rgba(255, 255, 255, calc(0.18 + (var(--storm-core) * 0.45))),
+      transparent 48%
+    ),
+    repeating-conic-gradient(
+      from calc(var(--storm-rotate) + 28deg),
+      rgba(124, 92, 255, 0) 0deg,
+      rgba(124, 92, 255, calc(0.25 + (var(--storm-flash) * 0.7))) 10deg,
+      rgba(244, 182, 62, calc(0.18 + (var(--storm-flash) * 0.6))) 12deg,
+      rgba(124, 92, 255, 0) 18deg
+    ),
+    linear-gradient(
+      120deg,
+      rgba(124, 92, 255, 0) 32%,
+      rgba(124, 92, 255, calc(0.2 + (var(--storm-flash) * 0.7))) 48%,
+      rgba(255, 255, 255, 0) 62%
+    ),
+    linear-gradient(
+      32deg,
+      rgba(244, 182, 62, 0) 25%,
+      rgba(244, 182, 62, calc(0.18 + (var(--storm-flash) * 0.6))) 44%,
+      rgba(244, 182, 62, 0) 66%
+    ),
+    conic-gradient(
+      from var(--storm-rotate),
+      rgba(124, 92, 255, 0.0),
+      rgba(124, 92, 255, 0.35),
+      rgba(244, 182, 62, 0.55),
+      rgba(255, 255, 255, 0.15),
+      rgba(124, 92, 255, 0.0)
+    );
+  opacity: var(--storm-glow);
+  filter: blur(4px) saturate(1.35) brightness(1.08);
+  transform: translateX(var(--storm-shift));
+  mix-blend-mode: screen;
+  background-blend-mode: screen;
+  transition: opacity 0.4s ease;
+  z-index: 0;
+}
+
+.storm-chip::after {
+  content: "";
+  position: absolute;
+  inset: 1px;
+  border-radius: inherit;
+  background: linear-gradient(
+    140deg,
+    rgba(8, 8, 12, 0.85),
+    rgba(8, 8, 12, 0.35)
+  );
+  z-index: 1;
+}
+
+.storm-chip > span {
+  position: relative;
+  z-index: 3;
+}
+
+.storm-rods {
+  position: absolute;
+  inset: 6px 10px;
+  border-radius: inherit;
+  pointer-events: none;
+  z-index: 2;
+  overflow: hidden;
+  mix-blend-mode: screen;
+}
+
+.storm-rod {
+  position: absolute;
+  top: -20%;
+  bottom: -20%;
+  width: 2px;
+  border-radius: 999px;
+  background: linear-gradient(
+    180deg,
+    transparent,
+    rgba(255, 255, 255, 0.95),
+    rgba(124, 92, 255, 0.75),
+    rgba(244, 182, 62, 0.55),
+    transparent
+  );
+  opacity: 0;
+  filter: drop-shadow(0 0 8px rgba(124, 92, 255, 0.45));
+}
+
+.fade-in {
+  animation: fadeIn 0.8s ease forwards;
+  opacity: 0;
+}
+
+.fade-up {
+  animation: fadeUp 0.9s ease forwards;
+  opacity: 0;
+  transform: translateY(16px);
+}
+
+@keyframes fadeIn {
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes fadeUp {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
