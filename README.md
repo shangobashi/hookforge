@@ -6,4 +6,4 @@ Built for speed, clarity, and consistency, HookForge is the content engine that 
 
 All rights reserved.
 
-Made by Shango Bashi for BlueLabs, 2026.
+Made by Shango Bashi for ISSALABS, 2026.
