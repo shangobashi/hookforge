@@ -257,7 +257,7 @@ export default function Home() {
 
         <footer className="mx-auto w-full max-w-6xl px-6 pb-12 pt-12 text-xs text-[var(--muted)]">
           <div className="flex flex-col items-start justify-between gap-4 md:flex-row">
-            <p>© 2026 HookForge. By BLUELABS. Built for creator-led businesses.</p>
+            <p>© 2026 HookForge. By ISSALABS. Built for creator-led businesses.</p>
             <div className="flex items-center gap-6">
               <a href="mailto:hello@shangobashi.com" className="hover:text-white">
                 Contact
