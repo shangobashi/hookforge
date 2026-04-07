@@ -1,5 +1,6 @@
 ﻿"use client";
 
+import Link from "next/link";
 import { useEffect, useMemo, useRef, useState } from "react";
 import type { ChatMessage, GenerationResult } from "@/lib/types";
 import { gsap } from "gsap";
@@ -21,7 +22,13 @@ const limitList = [
   "Launching a SaaS",
 ];
 
-export default function ContentGenerator() {
+type ContentGeneratorProps = {
+  guestMode?: boolean;
+};
+
+export default function ContentGenerator({
+  guestMode = false,
+}: ContentGeneratorProps) {
   const [form, setForm] = useState(initial);
   const [result, setResult] = useState<GenerationResult | null>(null);
   const [loading, setLoading] = useState(false);
@@ -216,6 +223,10 @@ export default function ContentGenerator() {
   }, []);
 
   useEffect(() => {
+    if (guestMode) {
+      setAccountTier("FREE");
+      return;
+    }
     let isActive = true;
     const loadTier = async () => {
       try {
@@ -255,7 +266,7 @@ export default function ContentGenerator() {
     return () => {
       isActive = false;
     };
-  }, []);
+  }, [guestMode]);
 
   useEffect(() => {
     weeklyRimTweens.current.forEach((tween) => tween.kill());
@@ -333,7 +344,10 @@ export default function ContentGenerator() {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(form),
+        body: JSON.stringify({
+          ...form,
+          ...(guestMode ? { isDemo: true } : {}),
+        }),
       });
       const payload = await res.json();
       if (!res.ok) {
@@ -369,7 +383,11 @@ export default function ContentGenerator() {
       const res = await fetch("/api/chat", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ messages: nextMessages, context: result }),
+        body: JSON.stringify({
+          messages: nextMessages,
+          context: result,
+          ...(guestMode ? { isDemo: true } : {}),
+        }),
       });
       const payload = await res.json();
       if (!res.ok) {
@@ -433,9 +451,21 @@ export default function ContentGenerator() {
               Add the minimum and we'll generate hooks, a weekly map, and a thread
               outline.
             </p>
+            {guestMode ? (
+              <div className="mt-4 rounded-2xl border border-[var(--border)] bg-black/30 px-4 py-3 text-sm text-white/80">
+                Demo mode is active. You can generate, chat, and export without
+                creating an account.
+                <Link
+                  href="/login"
+                  className="ml-2 text-[var(--accent)] transition hover:text-white"
+                >
+                  Log in instead
+                </Link>
+              </div>
+            ) : null}
           </div>
           <div className="hidden rounded-2xl border border-[var(--border)] bg-black/40 px-3 py-2 text-xs uppercase tracking-[0.3em] text-[var(--accent)] lg:block">
-            {accountTier}
+            {guestMode ? "DEMO" : accountTier}
           </div>
         </div>
         <div className="mt-6 grid gap-4">

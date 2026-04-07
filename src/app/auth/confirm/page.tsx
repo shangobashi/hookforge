@@ -2,6 +2,7 @@
 
 import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
+import { DEMO_ACCESS_COOKIE } from "@/lib/demo-access";
 import MascotLogo from "../../components/MascotLogo";
 import { supabaseBrowser } from "@/lib/supabase-browser";
 
@@ -33,6 +34,10 @@ export default function AuthConfirmPage() {
   }, []);
 
   const verify = async () => {
+    const clearDemoCookie = () => {
+      document.cookie = `${DEMO_ACCESS_COOKIE}=; Max-Age=0; Path=/; SameSite=Lax`;
+    };
+
     if (!tokenHash) {
       setState("verifying");
       setMessage(null);
@@ -47,6 +52,7 @@ export default function AuthConfirmPage() {
             refresh_token: refreshToken,
           });
           if (error) throw error;
+          clearDemoCookie();
           window.location.href = redirect;
           return;
         }
@@ -55,6 +61,7 @@ export default function AuthConfirmPage() {
             authCode,
           );
           if (codeError) throw codeError;
+          clearDemoCookie();
           window.location.href = redirect;
           return;
         }
@@ -75,6 +82,7 @@ export default function AuthConfirmPage() {
       });
       if (error) throw error;
       setState("success");
+      clearDemoCookie();
       window.location.href = redirect;
     } catch (err) {
       setState("error");

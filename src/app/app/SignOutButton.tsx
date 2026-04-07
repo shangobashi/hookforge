@@ -1,11 +1,13 @@
 "use client";
 
+import { DEMO_ACCESS_COOKIE } from "@/lib/demo-access";
 import { supabaseBrowser } from "@/lib/supabase-browser";
 
 export default function SignOutButton() {
   const signOut = async () => {
     const supabase = supabaseBrowser();
     await supabase.auth.signOut();
+    document.cookie = `${DEMO_ACCESS_COOKIE}=; Max-Age=0; Path=/; SameSite=Lax`;
     window.location.href = "/login";
   };
 

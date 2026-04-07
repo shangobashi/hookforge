@@ -1,9 +1,28 @@
+import { cookies } from "next/headers";
 import Link from "next/link";
+import {
+  DEMO_ACCESS_COOKIE,
+  DEMO_ACCESS_QUERY,
+  DEMO_ACCESS_VALUE,
+} from "@/lib/demo-access";
 import MascotLogo from "../components/MascotLogo";
 import ContentGenerator from "./ContentGenerator";
 import SignOutButton from "./SignOutButton";
 
-export default function AppPage() {
+type AppPageProps = {
+  searchParams?: Promise<Record<string, string | string[] | undefined>>;
+};
+
+export default async function AppPage({ searchParams }: AppPageProps) {
+  const params = (await searchParams) ?? {};
+  const demoParam = Array.isArray(params[DEMO_ACCESS_QUERY])
+    ? params[DEMO_ACCESS_QUERY][0]
+    : params[DEMO_ACCESS_QUERY];
+  const cookieStore = await cookies();
+  const guestMode =
+    demoParam === DEMO_ACCESS_VALUE ||
+    cookieStore.get(DEMO_ACCESS_COOKIE)?.value === DEMO_ACCESS_VALUE;
+
   return (
     <div className="bg-grid min-h-screen">
       <div className="hero-glow min-h-screen">
@@ -14,16 +33,34 @@ export default function AppPage() {
               Creator Workspace
             </span>
           </div>
-          <div className="flex items-center gap-4 text-xs uppercase tracking-[0.3em] text-[var(--muted)]">
-            <span>Authenticated</span>
-            <a
-              href="mailto:hello@shangobashi.com"
-              className="rounded-full border border-[var(--border)] px-4 py-2 text-white/80 transition hover:border-white hover:text-white"
-            >
-              Upgrade
-            </a>
-            <SignOutButton />
-          </div>
+          {guestMode ? (
+            <div className="flex items-center gap-4 text-xs uppercase tracking-[0.3em] text-[var(--muted)]">
+              <span>Demo Workspace</span>
+              <Link
+                href="/login"
+                className="rounded-full border border-[var(--border)] px-4 py-2 text-white/80 transition hover:border-white hover:text-white"
+              >
+                Log In
+              </Link>
+              <Link
+                href="/"
+                className="rounded-full border border-[var(--border)] px-4 py-2 text-white/80 transition hover:border-white hover:text-white"
+              >
+                Home
+              </Link>
+            </div>
+          ) : (
+            <div className="flex items-center gap-4 text-xs uppercase tracking-[0.3em] text-[var(--muted)]">
+              <span>Authenticated</span>
+              <a
+                href="mailto:hello@shangobashi.com"
+                className="rounded-full border border-[var(--border)] px-4 py-2 text-white/80 transition hover:border-white hover:text-white"
+              >
+                Upgrade
+              </a>
+              <SignOutButton />
+            </div>
+          )}
         </header>
         <main className="mx-auto w-full max-w-6xl px-6 pb-16">
           <div className="mb-8">
@@ -38,7 +75,7 @@ export default function AppPage() {
               calendars, and CTA-ready content for your brand.
             </p>
           </div>
-          <ContentGenerator />
+          <ContentGenerator guestMode={guestMode} />
         </main>
       </div>
     </div>

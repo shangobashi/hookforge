@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { Suspense } from "react";
+import { DEMO_ACCESS_PATH } from "@/lib/demo-access";
 import MascotLogo from "../components/MascotLogo";
 import LoginForm from "./ui/LoginForm";
 
@@ -28,6 +29,14 @@ export default function LoginPage() {
               <Suspense fallback={<div className="text-sm text-[var(--muted)]">Loading...</div>}>
                 <LoginForm />
               </Suspense>
+            </div>
+            <div className="mt-6 flex flex-wrap gap-3">
+              <Link
+                href={DEMO_ACCESS_PATH}
+                className="rounded-full border border-[var(--border)] px-6 py-3 text-xs uppercase tracking-[0.3em] text-white/80 transition hover:border-white hover:text-white"
+              >
+                Open Demo Workspace
+              </Link>
             </div>
           </div>
           <div className="mascot-hero-frame">

@@ -1,7 +1,12 @@
 "use client";
 
+import Link from "next/link";
 import { useState } from "react";
 import { useSearchParams } from "next/navigation";
+import {
+  DEMO_ACCESS_COOKIE,
+  DEMO_ACCESS_PATH,
+} from "@/lib/demo-access";
 import { supabaseBrowser } from "@/lib/supabase-browser";
 
 export default function LoginForm() {
@@ -19,6 +24,23 @@ export default function LoginForm() {
     setMessage(null);
   };
 
+  const clearDemoCookie = () => {
+    document.cookie = `${DEMO_ACCESS_COOKIE}=; Max-Age=0; Path=/; SameSite=Lax`;
+  };
+
+  const formatAuthError = (err: unknown) => {
+    const message =
+      err instanceof Error ? err.message : "The request could not be completed.";
+    if (
+      err instanceof TypeError ||
+      /failed to fetch/i.test(message) ||
+      /network/i.test(message)
+    ) {
+      return "HookForge auth is temporarily unavailable. Continue in demo mode while account access is restored.";
+    }
+    return message;
+  };
+
   const signIn = async () => {
     setStatus("loading");
     setMessage(null);
@@ -29,11 +51,12 @@ export default function LoginForm() {
         password,
       });
       if (error) throw error;
+      clearDemoCookie();
       setStatus("success");
       window.location.href = redirect;
     } catch (err) {
       setStatus("error");
-      setMessage(err instanceof Error ? err.message : "Failed to sign in.");
+      setMessage(formatAuthError(err));
     }
   };
 
@@ -53,6 +76,7 @@ export default function LoginForm() {
       });
       if (error) throw error;
       if (data.session) {
+        clearDemoCookie();
         window.location.href = redirect;
         return;
       }
@@ -60,7 +84,7 @@ export default function LoginForm() {
       setMessage("Check your email to confirm your account.");
     } catch (err) {
       setStatus("error");
-      setMessage(err instanceof Error ? err.message : "Failed to sign up.");
+      setMessage(formatAuthError(err));
     }
   };
 
@@ -82,7 +106,7 @@ export default function LoginForm() {
       setMessage("Check your email for the login link.");
     } catch (err) {
       setStatus("error");
-      setMessage(err instanceof Error ? err.message : "Failed to send link.");
+      setMessage(formatAuthError(err));
     }
   };
 
@@ -110,7 +134,7 @@ export default function LoginForm() {
             setPassword(event.target.value);
             resetStatus();
           }}
-          placeholder="••••••••"
+          placeholder="********"
           className="mt-2 w-full rounded-2xl border border-transparent bg-black/40 px-4 py-3 text-sm text-white focus:outline-none focus:ring-2 focus:ring-[var(--accent-2)]"
         />
       </label>
@@ -137,6 +161,12 @@ export default function LoginForm() {
       >
         Send magic link instead
       </button>
+      <Link
+        href={DEMO_ACCESS_PATH}
+        className="text-xs uppercase tracking-[0.3em] text-[var(--accent)] transition hover:text-white"
+      >
+        Continue in demo mode
+      </Link>
       {status === "sent" || status === "success" ? (
         <p className="text-sm text-emerald-300">{message}</p>
       ) : null}

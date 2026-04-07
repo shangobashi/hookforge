@@ -1,5 +1,6 @@
 import Link from "next/link";
 import Image from "next/image";
+import { DEMO_ACCESS_PATH } from "@/lib/demo-access";
 import { DemoGenerator } from "./components/DemoGenerator";
 import PricingSection from "./components/PricingSection";
 import HeroBadge from "./components/HeroBadge";
@@ -44,13 +45,13 @@ export default function Home() {
           <div className="flex w-full flex-col gap-4 md:hidden">
             <div className="flex w-full items-center justify-between">
               <MascotLogo size={36} />
-              <span className="text-xs uppercase tracking-[0.3em] text-[var(--muted)] pl-3 text-right">
+              <span className="pl-3 text-right text-xs uppercase tracking-[0.3em] text-[var(--muted)]">
                 Creator Ops Suite
               </span>
             </div>
             <div className="flex w-full items-center justify-between">
               <Link
-                href="/app"
+                href={DEMO_ACCESS_PATH}
                 className="rounded-full border border-[var(--border)] px-4 py-2 text-xs uppercase tracking-[0.3em] text-white transition hover:border-[var(--accent)]"
                 style={{ width: "calc((100% - 12px) / 2)", textAlign: "center" }}
               >
@@ -76,7 +77,7 @@ export default function Home() {
               Log in
             </Link>
             <Link
-              href="/app"
+              href={DEMO_ACCESS_PATH}
               className="rounded-full border border-[var(--border)] px-4 py-2 text-xs uppercase tracking-[0.3em] text-white transition hover:border-[var(--accent)]"
             >
               Open App
@@ -99,7 +100,7 @@ export default function Home() {
               </p>
               <div className="mt-8 flex flex-col gap-4 sm:flex-row">
                 <Link
-                  href="/app"
+                  href={DEMO_ACCESS_PATH}
                   className="w-full rounded-full bg-[var(--accent)] px-6 py-3 text-center text-sm font-semibold uppercase tracking-[0.3em] text-black transition hover:translate-y-[-1px] sm:w-auto"
                 >
                   Generate Content
@@ -153,16 +154,16 @@ export default function Home() {
                 </p>
                 <div className="mt-4 space-y-4 text-sm text-white/90">
                   <p className="rounded-2xl border border-[var(--border)] bg-[var(--card)] p-4">
-                    “I spent 6 weeks posting every day without growth. Here’s
-                    the 3-signal change that flipped it.”
+                    "I spent 6 weeks posting every day without growth. Here's
+                    the 3-signal change that flipped it."
                   </p>
                   <p className="rounded-2xl border border-[var(--border)] bg-[var(--card)] p-4">
-                    “Most creators write for everyone. This 1-page persona gave
-                    me 28 inbound leads.”
+                    "Most creators write for everyone. This 1-page persona gave
+                    me 28 inbound leads."
                   </p>
                   <p className="rounded-2xl border border-[var(--border)] bg-[var(--card)] p-4">
-                    “Stop shipping threads. Start shipping sequences: the 5-post
-                    weekly map I use.”
+                    "Stop shipping threads. Start shipping sequences: the 5-post
+                    weekly map I use."
                   </p>
                 </div>
               </div>
@@ -240,7 +241,7 @@ export default function Home() {
                 lead. Start in demo mode, then upgrade in-app.
               </p>
               <Link
-                href="/app"
+                href={DEMO_ACCESS_PATH}
                 className="rounded-full bg-[var(--accent)] px-8 py-3 text-sm font-semibold uppercase tracking-[0.3em] text-black"
               >
                 Open HookForge
@@ -265,7 +266,7 @@ export default function Home() {
               <a href="/login" className="hover:text-white">
                 Log in
               </a>
-              <a href="/app" className="hover:text-white">
+              <a href={DEMO_ACCESS_PATH} className="hover:text-white">
                 App
               </a>
             </div>
